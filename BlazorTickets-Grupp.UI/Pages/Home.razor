@@ -1,0 +1,46 @@
+﻿@page "/"
+@using BlazorTickets_Grupp.Data.DataBase.Models
+@using BlazorTickets_Grupp.UI.Services
+@using Newtonsoft.Json
+@inject TicketService service 
+@inject NavigationManager navigationManager;
+
+@foreach(TicketModel ticket in tickets)
+{
+    <Ticket ticket =ticket OnTicketClick="HandleClick"/>
+}
+
+@code
+{
+
+    private List<TicketModel> tickets;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            tickets = await service.GetAllTickets();
+        }
+        catch(HttpRequestException ex)
+        {
+
+        }
+        catch(JsonException ex)
+        {
+
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+
+    private void HandleClick()
+    {
+        navigationManager.NavigateTo(#)
+        
+    }
+
+
+}

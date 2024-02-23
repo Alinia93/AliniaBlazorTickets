@@ -1,0 +1,50 @@
+﻿@using BlazorTickets_Grupp.Data.DataBase.Models
+
+
+
+<div id="ticketContainer" @onclick="TicketClicked">
+
+    <h2>@ticket.Title</h2>
+    <p>@ticket.Description</p>
+    <p>Submitted by: @ticket.SubmittedBy</p>
+
+    @if (ticket.TicketTags != null)
+    {
+        <p>Tags: @string.Join(",", CheckTags(ticket).Select(t=>t.Name))</p>
+    } 
+
+    @if(ticket.Responses!=null){
+    @foreach(ResponseModel response in @ticket.Responses){
+        <p>Response: @response.Response</p>
+    }
+    }
+
+</div>
+
+
+
+
+@code {
+
+
+    [Parameter]
+    public TicketModel? ticket { get; set; }
+    [Parameter]
+
+    public EventCallback<TicketModel> OnTicketClick{ get; set; }
+
+
+    private List<TagModel> CheckTags(TicketModel ticket)
+    {
+        List <TagModel> tags = ticket.TicketTags.Select(t => t.Tag).ToList();
+        return tags;
+    }
+
+    private async Task TicketClicked()
+    {
+        if (OnTicketClick.HasDelegate)
+        {
+            OnTicketClick.InvokeAsync();
+        }
+    }
+}
